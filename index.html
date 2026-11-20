@@ -403,17 +403,51 @@ $(function(){
 	  });
 	  
 	
-	  $('.videoPlayerBtn').on('click', function(e){
-	  	e.preventDefault();
-		let url=$(this).attr('data-url');
-		$('.video_player').hide();
-		$('.videoLoading').show();
-	
-		setTimeout(function(){ 
-		 // window.location.href=url;
-		 $('#video_modal').modal('show');
-		}, 2000);
-	  });
+	  
+$(function(){
+
+    var video = document.getElementById('myVideo');
+
+    $('.videoPlayerBtn').on('click', function(e){
+        e.preventDefault();
+
+        if (video.paused) {
+            video.play();
+            $('.video_player').hide();
+            $('.videoLoading').show();
+        } else {
+            video.pause();
+            $('.video_player').show();
+        }
+    });
+
+    video.addEventListener('playing', function(){
+        $('.videoLoading').hide();
+        $('.video_player').hide();
+    });
+
+    video.addEventListener('waiting', function(){
+        $('.videoLoading').show();
+    });
+
+    video.addEventListener('pause', function(){
+        $('.videoLoading').hide();
+        $('.video_player').show();
+    });
+
+    video.addEventListener('ended', function(){
+        $('.video_player').show();
+    });
+
+    $('#volumeBtn').on('click', function(){
+        video.muted = !video.muted;
+
+        $(this).toggleClass('fa-volume-up', !video.muted);
+        $(this).toggleClass('fa-volume-off', video.muted);
+    });
+
+});
+
 	  
 	  $('#video_modal').on('hidden.bs.modal', function (e) {
 	  		e.preventDefault();
